@@ -40,6 +40,10 @@ steps:
   - script: |
       set -e
       npm config set registry "$NPM_REGISTRY" --location=project
+      # npm >v7 deprecated the `always-auth` config option, refs npm/cli@72a7eeb
+      # following is a workaround for yarn to send authorization header
+      # for GET requests to the registry.
+      echo "always-auth=true" >> .npmrc
     condition: and(succeeded(), ne(variables.NODE_MODULES_RESTORED, 'true'), ne(variables['NPM_REGISTRY'], 'none'))
     displayName: Setup NPM
 
